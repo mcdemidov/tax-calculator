@@ -12,6 +12,7 @@ const taxCalculator = () => {
     return currency.format(n);
   };
 
+  // Making calculators switch
   const navigationLinks = document.querySelectorAll('.navigation__link');
   const calcElems = document.querySelectorAll('.calc');
 
@@ -32,7 +33,6 @@ const taxCalculator = () => {
     });
   };
 
-  // Making calculators switch
   navigationLinks.forEach(el => {
     el.addEventListener('click', e => {
       e.preventDefault();
@@ -48,12 +48,43 @@ const taxCalculator = () => {
   const selfEmployment = document.querySelector('.self-employment');
   const formSelfEmployment = selfEmployment.querySelector('.calc__form');
   const resultTaxSelfemployment = selfEmployment.querySelector('.result__tax');
+  const calcCompensation = selfEmployment.querySelector('.calc__label_compensation');
+  const resultBlockCompensation = selfEmployment.querySelectorAll('.result__block_compensation');
+  const resultTaxCompensation = selfEmployment.querySelector('.result__tax_compensation');
+  const resultTaxRestCompensation = selfEmployment.querySelector('.result__tax_rest-compensation');
+  const resultTaxResult = selfEmployment.querySelector('.result__tax_result');
+
+  const checkCompensation = () => {
+    const setDisplay = formSelfEmployment.addCompensation.checked ? 'flex' : 'none';
+    const setResultDisplay = formSelfEmployment.addCompensation.checked ? 'block' : 'none';
+    calcCompensation.style.display = setDisplay;
+    resultBlockCompensation.forEach(el => {
+      el.style.display = setResultDisplay;
+    });
+  };
+
+  checkCompensation();
 
   formSelfEmployment.addEventListener('input', () => {
     const resIndividual = formSelfEmployment.individual.value * 0.04;
     const resEntity = formSelfEmployment.entity.value * 0.06;
 
-    resultTaxSelfemployment.textContent = formatCurrency(resIndividual + resEntity);
+    const tax = resIndividual + resEntity;
+    const benefit = formSelfEmployment.compensation.value;
+    const resBenefit =
+      formSelfEmployment.individual.value * 0.01 + formSelfEmployment.entity.value * 0.02;
+    const finalBenefit = benefit - resBenefit > 0 ? benefit - resBenefit : 0;
+    const finalTax = tax - (benefit - finalBenefit);
+
+    checkCompensation();
+
+    formSelfEmployment.compensation.value =
+      formSelfEmployment.compensation.value > 10000 ? 10000 : formSelfEmployment.compensation.value;
+
+    resultTaxSelfemployment.textContent = formatCurrency(tax);
+    resultTaxCompensation.textContent = formatCurrency(benefit - finalBenefit);
+    resultTaxRestCompensation.textContent = formatCurrency(finalBenefit);
+    resultTaxResult.textContent = formatCurrency(finalTax);
   });
 
   // AUSN calculator
