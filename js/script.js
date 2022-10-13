@@ -21,7 +21,7 @@ const taxCalculator = () => {
     });
   };
 
-  //
+  // Making calculators switch
   navigationLinks.forEach(el => {
     el.addEventListener('click', e => {
       removeActiveLinks();
