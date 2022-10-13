@@ -1,39 +1,35 @@
-'use strict';
+const taxCalculator = () => {
+  'use strict';
 
-const navigationLinks = document.querySelectorAll('.navigation__link');
-const calcElems = document.querySelectorAll('.calc');
+  const navigationLinks = document.querySelectorAll('.navigation__link');
+  const calcElems = document.querySelectorAll('.calc');
 
-//for (let i = 0; i < navigationLinks.length; i++) {
+  // Find the desired calculator and make it active
+  const getCalc = el => {
+    calcElems.forEach(item => {
+      item.dataset.tax === el
+        ? item.classList.add('calc_active')
+        : item.classList.remove('calc_active');
+    });
+  };
 
-//  console.log(i, navigationLinks[i]);
-//}
+  // Remove active links
+  const removeActiveLinks = () => {
+    navigationLinks.forEach(el => {
+      if (el.classList.contains('navigation__link_active'))
+        el.classList.remove('navigation__link_active');
+    });
+  };
 
-const getCalc = el => {
-  calcElems.forEach(item => {
-    if (item.dataset.tax === el) {
-      item.classList.add('calc_active');
-    } else {
-      item.classList.remove('calc_active');
-    }
-  });
-};
-
-const clearActiveLink = () => {
+  //
   navigationLinks.forEach(el => {
-    if (el.classList.contains('navigation__link_active')) {
-      el.classList.remove('navigation__link_active');
-    }
+    el.addEventListener('click', e => {
+      removeActiveLinks();
+      e.target.classList.add('navigation__link_active');
+
+      getCalc(e.target.dataset.tax);
+    });
   });
 };
 
-navigationLinks.forEach(el => {
-  el.addEventListener('click', e => {
-    let link = e.target;
-    clearActiveLink();
-    link.classList.add('navigation__link_active');
-
-    getCalc(link.dataset.tax);
-  });
-});
-
-console.log(navigationLinks);
+taxCalculator();
