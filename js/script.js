@@ -18,6 +18,14 @@ const getCalc = el => {
   });
 };
 
+const clearActiveLink = () => {
+  navigationLinks.forEach(el => {
+    if (el.classList.contains('navigation__link_active')) {
+      el.classList.remove('navigation__link_active');
+    }
+  });
+};
+
 navigationLinks.forEach(el => {
   el.addEventListener('click', e => {
     let link = e.target;
