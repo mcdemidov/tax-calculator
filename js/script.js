@@ -1,6 +1,17 @@
 const taxCalculator = () => {
   'use strict';
 
+  // Add format currency
+  const formatCurrency = n => {
+    const currency = new Intl.NumberFormat('ru-RU', {
+      style: 'currency',
+      currency: 'RUB',
+      maximumFractionDigits: 2,
+    });
+
+    return currency.format(n);
+  };
+
   const navigationLinks = document.querySelectorAll('.navigation__link');
   const calcElems = document.querySelectorAll('.calc');
 
@@ -32,7 +43,21 @@ const taxCalculator = () => {
     });
   });
 
+  // Self-employment calculator
+
+  const selfEmployment = document.querySelector('.self-employment');
+  const formSelfEmployment = selfEmployment.querySelector('.calc__form');
+  const resultTaxSelfemployment = selfEmployment.querySelector('.result__tax');
+
+  formSelfEmployment.addEventListener('input', () => {
+    const resIndividual = formSelfEmployment.individual.value * 0.04;
+    const resEntity = formSelfEmployment.entity.value * 0.06;
+
+    resultTaxSelfemployment.textContent = formatCurrency(resIndividual + resEntity);
+  });
+
   // AUSN calculator
+
   const ausn = document.querySelector('.ausn');
   const ausnForm = ausn.querySelector('.calc__form');
   const resultTaxTotal = ausn.querySelector('.result_tax_total');
@@ -43,13 +68,15 @@ const taxCalculator = () => {
   ausnForm.addEventListener('input', () => {
     if (ausnForm.type.value === 'income') {
       calcLabelExpenses.style.display = 'none';
-      resultTaxTotal.textContent = ausnForm.income.value * 0.08;
+      resultTaxTotal.textContent = formatCurrency(ausnForm.income.value * 0.08);
       ausnForm.expenses.value = '';
     }
 
     if (ausnForm.type.value === 'expenses') {
       calcLabelExpenses.style.display = 'block';
-      resultTaxTotal.textContent = (ausnForm.income.value - ausnForm.expenses.value) * 0.2;
+      resultTaxTotal.textContent = formatCurrency(
+        (ausnForm.income.value - ausnForm.expenses.value) * 0.2
+      );
     }
   });
 };
