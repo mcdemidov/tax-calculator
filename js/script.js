@@ -1,16 +1,17 @@
-const taxCalculator = () => {
+// Add format currency
+const formatCurrency = n => {
+  const currency = new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency: 'RUB',
+    maximumFractionDigits: 2,
+  });
+
+  return currency.format(n);
+};
+
+// Navigation
+const navigation = () => {
   'use strict';
-
-  // Add format currency
-  const formatCurrency = n => {
-    const currency = new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'RUB',
-      maximumFractionDigits: 2,
-    });
-
-    return currency.format(n);
-  };
 
   // Making calculators switch
   const navigationLinks = document.querySelectorAll('.navigation__link');
@@ -43,9 +44,11 @@ const taxCalculator = () => {
       getCalc(e.target.dataset.tax);
     });
   });
+};
 
-  // Self-employment calculator
-
+// Self-employment calculator
+const selfDeploymentCalculator = () => {
+  'use strict';
   const selfEmployment = document.querySelector('.self-employment');
   const formSelfEmployment = selfEmployment.querySelector('.calc__form');
   const resultTaxSelfemployment = selfEmployment.querySelector('.result__tax');
@@ -86,9 +89,11 @@ const taxCalculator = () => {
     resultTaxRestCompensation.textContent = formatCurrency(finalBenefit);
     resultTaxResult.textContent = formatCurrency(finalTax);
   });
+};
 
-  // AUSN calculator
-
+// AUSN calculator
+const ausnCalculator = () => {
+  'use strict';
   const ausn = document.querySelector('.ausn');
   const ausnForm = ausn.querySelector('.calc__form');
   const resultTaxTotal = ausn.querySelector('.result_tax_total');
@@ -110,8 +115,11 @@ const taxCalculator = () => {
       );
     }
   });
+};
 
-  // OSNO calculator
+// OSNO calculator
+const osnoCalculator = () => {
+  'use strict';
   const osno = document.querySelector('.osno');
   const osnoForm = osno.querySelector('.calc__form');
   const ndflExpenses = osno.querySelector('.result__block_ndfl-expenses');
@@ -159,8 +167,11 @@ const taxCalculator = () => {
     resultTaxNdflIncome.textContent = ndflIncomeTotal;
     resultTaxProfit.textContent = taxProfit;
   });
+};
 
-  // USN calculator
+// USN calculator
+const usnCalculator = () => {
+  'use strict';
   const usn = document.querySelector('.usn');
   const usnForm = usn.querySelector('.calc__form');
 
@@ -172,4 +183,12 @@ const taxCalculator = () => {
   const resultTaxProperty = usn.querySelector('.result__tax_property');
 };
 
-taxCalculator();
+navigation();
+
+selfDeploymentCalculator();
+
+ausnCalculator();
+
+osnoCalculator();
+
+usnCalculator();
