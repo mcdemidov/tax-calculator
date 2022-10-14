@@ -28,8 +28,9 @@ const taxCalculator = () => {
   // Remove active links
   const removeActiveLinks = () => {
     navigationLinks.forEach(el => {
-      if (el.classList.contains('navigation__link_active'))
+      if (el.classList.contains('navigation__link_active')) {
         el.classList.remove('navigation__link_active');
+      }
     });
   };
 
@@ -146,6 +147,17 @@ const taxCalculator = () => {
     const property = osnoForm.property.value;
 
     const nds = income * 0.2;
+    const taxPropertys = property * 0.02;
+    const profit = income - expenses;
+    const ndflExpensesTotal = profit * 0.13;
+    const ndflIncomeTotal = (income - nds) * 0.13;
+    const taxProfit = profit * 0.2;
+
+    resultTaxNds.textContent = nds;
+    resultTaxProperty.textContent = taxPropertys;
+    resultTaxNdflExpenses.textContent = ndflExpensesTotal;
+    resultTaxNdflIncome.textContent = ndflIncomeTotal;
+    resultTaxProfit.textContent = taxProfit;
   });
 };
 
