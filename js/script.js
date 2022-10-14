@@ -1,4 +1,5 @@
 // Add format currency
+'use strict';
 const formatCurrency = n => {
   const currency = new Intl.NumberFormat('ru-RU', {
     style: 'currency',
@@ -11,8 +12,6 @@ const formatCurrency = n => {
 
 // Navigation
 const navigation = () => {
-  'use strict';
-
   // Making calculators switch
   const navigationLinks = document.querySelectorAll('.navigation__link');
   const calcElems = document.querySelectorAll('.calc');
@@ -48,7 +47,6 @@ const navigation = () => {
 
 // Self-employment calculator
 const selfDeploymentCalculator = () => {
-  'use strict';
   const selfEmployment = document.querySelector('.self-employment');
   const formSelfEmployment = selfEmployment.querySelector('.calc__form');
   const resultTaxSelfemployment = selfEmployment.querySelector('.result__tax');
@@ -93,7 +91,6 @@ const selfDeploymentCalculator = () => {
 
 // AUSN calculator
 const ausnCalculator = () => {
-  'use strict';
   const ausn = document.querySelector('.ausn');
   const ausnForm = ausn.querySelector('.calc__form');
   const resultTaxTotal = ausn.querySelector('.result_tax_total');
@@ -119,7 +116,6 @@ const ausnCalculator = () => {
 
 // OSNO calculator
 const osnoCalculator = () => {
-  'use strict';
   const osno = document.querySelector('.osno');
   const osnoForm = osno.querySelector('.calc__form');
   const ndflExpenses = osno.querySelector('.result__block_ndfl-expenses');
@@ -171,7 +167,8 @@ const osnoCalculator = () => {
 
 // USN calculator
 const usnCalculator = () => {
-  'use strict';
+  const LIMIT = 300000;
+
   const usn = document.querySelector('.usn');
   const usnForm = usn.querySelector('.calc__form');
 
@@ -181,6 +178,65 @@ const usnCalculator = () => {
 
   const resultTaxFinal = usn.querySelector('.result__tax_final');
   const resultTaxProperty = usn.querySelector('.result__tax_property');
+
+  const checkTypeProperty = typeTax => {
+    switch (typeTax) {
+      case 'income': {
+        calcLableExpenses.style.display = 'none';
+        calcLabelProperty.style.display = 'none';
+        resultBlockProperty.style.display = 'none';
+
+        usnForm.expenses.value = '';
+        usnForm.property.value = '';
+        break;
+      }
+      case 'ip-expenses': {
+        calcLableExpenses.style.display = '';
+        calcLabelProperty.style.display = 'none';
+        resultBlockProperty.style.display = 'none';
+
+        usnForm.property.value = '';
+        break;
+      }
+      case 'ooo-expenses': {
+        calcLableExpenses.style.display = '';
+        calcLabelProperty.style.display = '';
+        resultBlockProperty.style.display = '';
+        break;
+      }
+    }
+  };
+
+  const percent = {
+    income: 0.06,
+    'ip-expenses': 0.15,
+    'ooo-expenses': 0.15,
+  };
+
+  checkTypeProperty(usnForm.typeTax.value);
+
+  usnForm.addEventListener('input', () => {
+    checkTypeProperty(usnForm.typeTax.value);
+
+    const income = usnForm.income.value;
+    const expenses = usnForm.expenses.value;
+    const contributions = usnForm.contributions.value;
+    const property = usnForm.property.value;
+
+    let profit = income - contributions;
+
+    if (usnForm.typeTax.value !== 'income') {
+      profit -= expenses;
+    }
+
+    const taxBigIncome = income > LIMIT ? (profit - LIMIT) * 0.01 : 0;
+    const summ = profit - (taxBigIncome < 0 ? 0 : taxBigIncome);
+    const tax = summ * percent[usnForm.typeTax.value];
+    const taxProperty = property * 0.02;
+
+    resultTaxFinal.textContent = formatCurrency(tax);
+    resultTaxProperty.textContent = formatCurrency(taxProperty);
+  });
 };
 
 navigation();
