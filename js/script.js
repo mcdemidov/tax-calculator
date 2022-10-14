@@ -161,6 +161,15 @@ const taxCalculator = () => {
   });
 
   // USN calculator
+  const usn = document.querySelector('.usn');
+  const usnForm = usn.querySelector('.calc__form');
+
+  const calcLableExpenses = usn.querySelector('.calc__lable_expenses');
+  const calcLabelProperty = usn.querySelector('.calc__label_property');
+  const resultBlockProperty = usn.querySelector('.result__block_property');
+
+  const resultTaxFinal = usn.querySelector('.result__tax_final');
+  const resultTaxProperty = usn.querySelector('.result__tax_property');
 };
 
 taxCalculator();
