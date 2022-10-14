@@ -55,11 +55,10 @@ const taxCalculator = () => {
   const resultTaxResult = selfEmployment.querySelector('.result__tax_result');
 
   const checkCompensation = () => {
-    const setDisplay = formSelfEmployment.addCompensation.checked ? 'flex' : 'none';
-    const setResultDisplay = formSelfEmployment.addCompensation.checked ? 'block' : 'none';
+    const setDisplay = formSelfEmployment.addCompensation.checked ? '' : 'none';
     calcCompensation.style.display = setDisplay;
     resultBlockCompensation.forEach(el => {
-      el.style.display = setResultDisplay;
+      el.style.display = setDisplay;
     });
   };
 
@@ -104,11 +103,49 @@ const taxCalculator = () => {
     }
 
     if (ausnForm.type.value === 'expenses') {
-      calcLabelExpenses.style.display = 'block';
+      calcLabelExpenses.style.display = '';
       resultTaxTotal.textContent = formatCurrency(
         (ausnForm.income.value - ausnForm.expenses.value) * 0.2
       );
     }
+  });
+
+  // OSNO calculator
+  const osno = document.querySelector('.osno');
+  const osnoForm = osno.querySelector('.calc__form');
+  const ndflExpenses = osno.querySelector('.result__block_ndfl-expenses');
+  const ndflIncome = osno.querySelector('.result__block_ndfl-income');
+  const profit = osno.querySelector('.result__block_profit');
+
+  const resultTaxNds = osno.querySelector('.result__tax_nds');
+  const resultTaxProperty = osno.querySelector('.result__tax_property');
+  const resultTaxNdflExpenses = osno.querySelector('.result__tax_ndfl-expenses');
+  const resultTaxNdflIncome = osno.querySelector('.result__tax_ndfl-income');
+  const resultTaxProfit = osno.querySelector('.result__tax_profit');
+
+  const checkFormBusiness = () => {
+    if (osnoForm.formBusiness.value === 'ИП') {
+      ndflExpenses.style.display = '';
+      ndflIncome.style.display = '';
+      profit.style.display = 'none';
+    }
+    if (osnoForm.formBusiness.value === 'ООО') {
+      ndflExpenses.style.display = 'none';
+      ndflIncome.style.display = 'none';
+      profit.style.display = '';
+    }
+  };
+
+  checkFormBusiness();
+
+  osnoForm.addEventListener('input', () => {
+    checkFormBusiness();
+
+    const income = osnoForm.income.value;
+    const expenses = osnoForm.expenses.value;
+    const property = osnoForm.property.value;
+
+    const nds = income * 0.2;
   });
 };
 
