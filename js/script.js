@@ -159,6 +159,8 @@ const taxCalculator = () => {
     resultTaxNdflIncome.textContent = ndflIncomeTotal;
     resultTaxProfit.textContent = taxProfit;
   });
+
+  // USN calculator
 };
 
 taxCalculator();
